@@ -6,7 +6,7 @@ const path          = require("path");
 // TODO convert this crap to makefile
 
 var gameName         = "smm2";
-var idaCommandPrefix = config.IDA_path + "/ida64.exe -parm:ARMv8-A -TARM -b1A7316700 -Lida_batch.log -o%TEMP%/database.idb -c -A";
+var idaCommandPrefix = config.IDA_path + "/idat64.exe -z 00008000 -parm:ARMv8-A -TARM -b1A7316700 -Lida_batch.log -o%TEMP%/temp.idb -c -A";
 
 function getCommandLineChildProcess(string) {
 	console.log(string);
@@ -20,7 +20,7 @@ function getCommandLineChildProcess(string) {
 // Use SwIPC for the rest of the extern functions
 async function startGenSdkFuncs(game) {
 	console.log("------START GENERATING SDK FUNCS------");
-	var getSdkFuncsProcess = getCommandLineChildProcess(idaCommandPrefix + " -S\"" + path.resolve("dumpsdkfuncs.py") + " --std-defs games/" + game + "/defs.txt --function_start 7100000000\" " + path.resolve("games/" + game + "/exefs/main"));
+	var getSdkFuncsProcess = getCommandLineChildProcess(idaCommandPrefix + " -S\'" + path.resolve("dumpsdkfuncs.py") + " --std-defs games/" + game + "/defs.txt --function_start 7100000000\' " + path.resolve("games/" + game + "/exefs/main"));
 
 	getSdkFuncsProcess.stdout.on("data", data => {
 		console.log(data);
@@ -43,7 +43,7 @@ async function startGenSdkFuncs(game) {
 async function startGenConfig(game) {
 	console.log("------START GENERATING CONFIG------");
 	var mcsemaPythonPath = config.mcsema_path + "/Lib/site-packages/mcsema_disass-2.0-py3.8.egg/mcsema_disass/ida7/get_cfg.py";
-	var genConfigProcess = getCommandLineChildProcess(idaCommandPrefix + " -S\"" + mcsemaPythonPath + " --output" + game + ".cfg --std-defs games/" + game + "/defs.txt --arch aarch64 --os linux --entrypoint nnMain\" " + path.resolve("games/" + game + "/exefs/main"));
+	var genConfigProcess = getCommandLineChildProcess(idaCommandPrefix + " -S\'" + mcsemaPythonPath + " --output" + game + ".cfg --std-defs games/" + game + "/defs.txt --arch aarch64 --os linux --entrypoint nnMain\' " + path.resolve("games/" + game + "/exefs/main"));
 
 	genConfigProcess.stdout.on("data", data => {
 		console.log(data);
@@ -141,8 +141,8 @@ async function generateNativeExecutable(game, target) {
 }
 
 async function genGameExecutable(gameName) {
-	await startGenSdkFuncs(gameName);
-	// await startGenConfig(gameName);
+	// await startGenSdkFuncs(gameName);
+	await startGenConfig(gameName);
 	// await startMcsema(gameName);
 	// await generateNativeExecutable(gameName, "native-64bit");
 }

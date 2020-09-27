@@ -18,6 +18,9 @@ parser.add_argument(
 
 args = parser.parse_args(args = idc.ARGV[1: ])
 
+print "Wait for auto analysis"
+idc.auto_wait()
+
 print "Starting analysis"
 for ea in idautils.Functions():
 	str = idc.get_func_name(ea)
@@ -26,3 +29,4 @@ for ea in idautils.Functions():
 	args.sdk_funcs.close()
 
 print "Done analysis!"
+idc.qexit(0)
