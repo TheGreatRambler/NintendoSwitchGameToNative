@@ -1,0 +1,236 @@
+Possible file format: Nintendo Switch (v0.22 - Peter Garba) (C:\Users\aehar\com_internals\portable_programs\IDA_Pro\loaders\Switch64.dll)
+
+  bytes   pages size description
+--------- ----- ---- --------------------------------------------
+ 82108416 10023 8192 allocating memory for b-tree...
+ 82108416 10023 8192 allocating memory for virtual array...
+   262144    32 8192 allocating memory for name pointers...
+-----------------------------------------------------------------
+164478976            total memory allocated
+
+Loading file 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' into database...
+Detected file format: Nintendo Switch (v0.22 - Peter Garba)
+Loading processor module C:\Users\aehar\com_internals\portable_programs\IDA_Pro\procs\arm64.dll for ARM...OK
+Autoanalysis subsystem has been initialized.
+Assuming __fastcall calling convention by default
+Type library 'gnulnx_arm64' loaded. Applying types...
+Types applied to 0 names.
+  0. Creating a new segment  (0000007100000000-0000007101CBB000) ... ... OK
+  1. Creating a new segment  (0000007101CBB000-00000071027B6000) ... ... OK
+  2. Creating a new segment  (00000071027B6000-0000007102A18000) ... ... OK
+  3. Creating a new segment  (0000007102A17A00-0000007102E72DF0) ... ... OK
+  4. Creating a new segment  (00000071023DAF28-00000071024A6F9C) ... ... OK
+     Additional segment      (00000071024A6F9C-00000071027B6000) ...
+  5. Creating a new segment  (00000071024A6F9C-00000071027B6000) ... ... OK
+  6. Creating a new segment  (0000007102E73008-0000007102E74CC0) ... ... OK
+Marking typical code sequences...
+Flushing buffers, please wait...ok
+File 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' has been successfully loaded into the database.
+IDA is analysing the input file...
+You may start to explore the input file right now.
+---------------------------------------------------------------------------------------------
+Python 2.7 (r27:82525, Jul  4 2010, 07:43:08) [MSC v.1500 64 bit (AMD64)] 
+IDAPython 64-bit v7.3.0 final (serial 0) (c) The IDAPython Team <idapython@googlegroups.com>
+---------------------------------------------------------------------------------------------
+Flushing buffers, please wait...ok
+Unloading IDP module C:\Users\aehar\com_internals\portable_programs\IDA_Pro\procs\arm64.dll...
+Possible file format: Nintendo Switch (v0.22 - Peter Garba) (C:\Users\aehar\com_internals\portable_programs\IDA_Pro\loaders\Switch64.dll)
+
+  bytes   pages size description
+--------- ----- ---- --------------------------------------------
+ 82108416 10023 8192 allocating memory for b-tree...
+ 82108416 10023 8192 allocating memory for virtual array...
+   262144    32 8192 allocating memory for name pointers...
+-----------------------------------------------------------------
+164478976            total memory allocated
+
+Loading file 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' into database...
+Detected file format: Nintendo Switch (v0.22 - Peter Garba)
+Loading processor module C:\Users\aehar\com_internals\portable_programs\IDA_Pro\procs\arm64.dll for ARM...OK
+Autoanalysis subsystem has been initialized.
+Assuming __fastcall calling convention by default
+Type library 'gnulnx_arm64' loaded. Applying types...
+Types applied to 0 names.
+  0. Creating a new segment  (0000007100000000-0000007101CBB000) ... ... OK
+  1. Creating a new segment  (0000007101CBB000-00000071027B6000) ... ... OK
+  2. Creating a new segment  (00000071027B6000-0000007102A18000) ... ... OK
+  3. Creating a new segment  (0000007102A17A00-0000007102E72DF0) ... ... OK
+  4. Creating a new segment  (00000071023DAF28-00000071024A6F9C) ... ... OK
+     Additional segment      (00000071024A6F9C-00000071027B6000) ...
+  5. Creating a new segment  (00000071024A6F9C-00000071027B6000) ... ... OK
+  6. Creating a new segment  (0000007102E73008-0000007102E74CC0) ... ... OK
+Marking typical code sequences...
+Flushing buffers, please wait...ok
+File 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' has been successfully loaded into the database.
+IDA is analysing the input file...
+You may start to explore the input file right now.
+Possible file format: Nintendo Switch (v0.22 - Peter Garba) (C:\Users\aehar\com_internals\portable_programs\IDA_Pro\loaders\Switch64.dll)
+
+  bytes   pages size description
+--------- ----- ---- --------------------------------------------
+ 82108416 10023 8192 allocating memory for b-tree...
+ 82108416 10023 8192 allocating memory for virtual array...
+   262144    32 8192 allocating memory for name pointers...
+-----------------------------------------------------------------
+164478976            total memory allocated
+
+Loading file 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' into database...
+Detected file format: Nintendo Switch (v0.22 - Peter Garba)
+Loading processor module C:\Users\aehar\com_internals\portable_programs\IDA_Pro\procs\arm64.dll for ARM...OK
+Autoanalysis subsystem has been initialized.
+Assuming __fastcall calling convention by default
+Type library 'gnulnx_arm64' loaded. Applying types...
+Types applied to 0 names.
+  0. Creating a new segment  (0000007100000000-0000007101CBB000) ... ... OK
+  1. Creating a new segment  (0000007101CBB000-00000071027B6000) ... ... OK
+  2. Creating a new segment  (00000071027B6000-0000007102A18000) ... ... OK
+  3. Creating a new segment  (0000007102A17A00-0000007102E72DF0) ... ... OK
+  4. Creating a new segment  (00000071023DAF28-00000071024A6F9C) ... ... OK
+     Additional segment      (00000071024A6F9C-00000071027B6000) ...
+  5. Creating a new segment  (00000071024A6F9C-00000071027B6000) ... ... OK
+  6. Creating a new segment  (0000007102E73008-0000007102E74CC0) ... ... OK
+Marking typical code sequences...
+Flushing buffers, please wait...ok
+File 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' has been successfully loaded into the database.
+IDA is analysing the input file...
+You may start to explore the input file right now.
+710102C7A8: too many xrefs to track the value of SP.
+To improve the analysis quality, increase ARM_REGTRACK_MAX_XREFS in ida.cfg
+Propagating type information...
+Function argument information has been propagated
+The initial autoanalysis has been finished.
+---------------------------------------------------------------------------------------------
+Python 2.7 (r27:82525, Jul  4 2010, 07:43:08) [MSC v.1500 64 bit (AMD64)] 
+IDAPython 64-bit v7.3.0 final (serial 0) (c) The IDAPython Team <idapython@googlegroups.com>
+---------------------------------------------------------------------------------------------
+Flushing buffers, please wait...ok
+Unloading IDP module C:\Users\aehar\com_internals\portable_programs\IDA_Pro\procs\arm64.dll...
+Possible file format: Nintendo Switch (v0.22 - Peter Garba) (C:\Users\aehar\com_internals\portable_programs\IDA_Pro\loaders\Switch64.dll)
+
+  bytes   pages size description
+--------- ----- ---- --------------------------------------------
+ 82108416 10023 8192 allocating memory for b-tree...
+ 82108416 10023 8192 allocating memory for virtual array...
+   262144    32 8192 allocating memory for name pointers...
+-----------------------------------------------------------------
+164478976            total memory allocated
+
+Loading file 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' into database...
+Detected file format: Nintendo Switch (v0.22 - Peter Garba)
+Loading processor module C:\Users\aehar\com_internals\portable_programs\IDA_Pro\procs\arm64.dll for ARM...OK
+Autoanalysis subsystem has been initialized.
+Assuming __fastcall calling convention by default
+Type library 'gnulnx_arm64' loaded. Applying types...
+Types applied to 0 names.
+  0. Creating a new segment  (0000007100000000-0000007101CBB000) ... ... OK
+  1. Creating a new segment  (0000007101CBB000-00000071027B6000) ... ... OK
+  2. Creating a new segment  (00000071027B6000-0000007102A18000) ... ... OK
+  3. Creating a new segment  (0000007102A17A00-0000007102E72DF0) ... ... OK
+  4. Creating a new segment  (00000071023DAF28-00000071024A6F9C) ... ... OK
+     Additional segment      (00000071024A6F9C-00000071027B6000) ...
+  5. Creating a new segment  (00000071024A6F9C-00000071027B6000) ... ... OK
+  6. Creating a new segment  (0000007102E73008-0000007102E74CC0) ... ... OK
+Marking typical code sequences...
+Flushing buffers, please wait...ok
+File 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' has been successfully loaded into the database.
+IDA is analysing the input file...
+You may start to explore the input file right now.
+Possible file format: Nintendo Switch (v0.22 - Peter Garba) (C:\Users\aehar\com_internals\portable_programs\IDA_Pro\loaders\Switch64.dll)
+
+  bytes   pages size description
+--------- ----- ---- --------------------------------------------
+ 82108416 10023 8192 allocating memory for b-tree...
+ 82108416 10023 8192 allocating memory for virtual array...
+   262144    32 8192 allocating memory for name pointers...
+-----------------------------------------------------------------
+164478976            total memory allocated
+
+Loading file 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' into database...
+Detected file format: Nintendo Switch (v0.22 - Peter Garba)
+Loading processor module C:\Users\aehar\com_internals\portable_programs\IDA_Pro\procs\arm64.dll for ARM...OK
+Autoanalysis subsystem has been initialized.
+Assuming __fastcall calling convention by default
+Type library 'gnulnx_arm64' loaded. Applying types...
+Types applied to 0 names.
+  0. Creating a new segment  (0000007100000000-0000007101CBB000) ... ... OK
+  1. Creating a new segment  (0000007101CBB000-00000071027B6000) ... ... OK
+  2. Creating a new segment  (00000071027B6000-0000007102A18000) ... ... OK
+  3. Creating a new segment  (0000007102A17A00-0000007102E72DF0) ... ... OK
+  4. Creating a new segment  (00000071023DAF28-00000071024A6F9C) ... ... OK
+     Additional segment      (00000071024A6F9C-00000071027B6000) ...
+  5. Creating a new segment  (00000071024A6F9C-00000071027B6000) ... ... OK
+  6. Creating a new segment  (0000007102E73008-0000007102E74CC0) ... ... OK
+Marking typical code sequences...
+Flushing buffers, please wait...ok
+File 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' has been successfully loaded into the database.
+IDA is analysing the input file...
+You may start to explore the input file right now.
+Possible file format: Nintendo Switch (v0.22 - Peter Garba) (C:\Users\aehar\com_internals\portable_programs\IDA_Pro\loaders\Switch64.dll)
+
+  bytes   pages size description
+--------- ----- ---- --------------------------------------------
+ 82108416 10023 8192 allocating memory for b-tree...
+ 82108416 10023 8192 allocating memory for virtual array...
+   262144    32 8192 allocating memory for name pointers...
+-----------------------------------------------------------------
+164478976            total memory allocated
+
+Loading file 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' into database...
+Detected file format: Nintendo Switch (v0.22 - Peter Garba)
+Loading processor module C:\Users\aehar\com_internals\portable_programs\IDA_Pro\procs\arm64.dll for ARM...OK
+Autoanalysis subsystem has been initialized.
+Assuming __fastcall calling convention by default
+Type library 'gnulnx_arm64' loaded. Applying types...
+Types applied to 0 names.
+  0. Creating a new segment  (0000007100000000-0000007101CBB000) ... ... OK
+  1. Creating a new segment  (0000007101CBB000-00000071027B6000) ... ... OK
+  2. Creating a new segment  (00000071027B6000-0000007102A18000) ... ... OK
+  3. Creating a new segment  (0000007102A17A00-0000007102E72DF0) ... ... OK
+  4. Creating a new segment  (00000071023DAF28-00000071024A6F9C) ... ... OK
+     Additional segment      (00000071024A6F9C-00000071027B6000) ...
+  5. Creating a new segment  (00000071024A6F9C-00000071027B6000) ... ... OK
+  6. Creating a new segment  (0000007102E73008-0000007102E74CC0) ... ... OK
+Marking typical code sequences...
+Flushing buffers, please wait...ok
+File 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' has been successfully loaded into the database.
+IDA is analysing the input file...
+You may start to explore the input file right now.
+IDA could not open the database: access denied.
+Probably the database is read-only or in use -> OK
+
+Database for file 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main.id0' is not closed. Do you want IDA to repair it?
+
+Please note that the repaired database will be upgraded to
+the current version of IDA and may still have problems.
+The best solution is to use the packed database or a backup.
+ -> ~R~epair
+Possible file format: Nintendo Switch (v0.22 - Peter Garba) (C:\Users\aehar\com_internals\portable_programs\IDA_Pro\loaders\Switch64.dll)
+
+  bytes   pages size description
+--------- ----- ---- --------------------------------------------
+ 82108416 10023 8192 allocating memory for b-tree...
+ 82108416 10023 8192 allocating memory for virtual array...
+   262144    32 8192 allocating memory for name pointers...
+-----------------------------------------------------------------
+164478976            total memory allocated
+
+Loading file 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' into database...
+Detected file format: Nintendo Switch (v0.22 - Peter Garba)
+Loading processor module C:\Users\aehar\com_internals\portable_programs\IDA_Pro\procs\arm64.dll for ARM...OK
+Autoanalysis subsystem has been initialized.
+Assuming __fastcall calling convention by default
+Type library 'gnulnx_arm64' loaded. Applying types...
+Types applied to 0 names.
+  0. Creating a new segment  (0000007100000000-0000007101CBB000) ... ... OK
+  1. Creating a new segment  (0000007101CBB000-00000071027B6000) ... ... OK
+  2. Creating a new segment  (00000071027B6000-0000007102A18000) ... ... OK
+  3. Creating a new segment  (0000007102A17A00-0000007102E72DF0) ... ... OK
+  4. Creating a new segment  (00000071023DAF28-00000071024A6F9C) ... ... OK
+     Additional segment      (00000071024A6F9C-00000071027B6000) ...
+  5. Creating a new segment  (00000071024A6F9C-00000071027B6000) ... ... OK
+  6. Creating a new segment  (0000007102E73008-0000007102E74CC0) ... ... OK
+Marking typical code sequences...
+Flushing buffers, please wait...ok
+File 'F:\Big_Projects\NintendoSwitchGameToNative\games\smm2\exefs\main' has been successfully loaded into the database.
+IDA is analysing the input file...
+You may start to explore the input file right now.
