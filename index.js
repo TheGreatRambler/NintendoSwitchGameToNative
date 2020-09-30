@@ -9,7 +9,7 @@ var res = function(thePath) {
 	return path.resolve(thePath).replace(/\\/g, '/');
 };
 var idaLogPath = res("idatemplog.txt");
-var tailCommand = res("bin/tail.exe");
+var tailCommand = "tail";
 
 var idaCommandPrefix = `${config.IDA_path}/idat64.exe -A -Tnintendo -L${idaLogPath}`;
 
