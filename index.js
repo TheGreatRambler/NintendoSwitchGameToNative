@@ -11,7 +11,7 @@ var res = function(thePath) {
 var idaLogPath = res("idatemplog.txt");
 var tailCommand = "tail";
 
-var idaCommandPrefix = `${config.IDA_path}/idat64.exe -A -Tnintendo -L${idaLogPath}`;
+var idaCommandPrefix = `${config.IDA_path}/ida64.exe -A -Tnintendo -L${idaLogPath}`;
 
 // Executable format: AARCH64 v8A 64 little	default
 // AARCH64:LE:64:v8A (1.4)
