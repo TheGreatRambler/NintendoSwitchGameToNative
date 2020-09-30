@@ -5,7 +5,7 @@ const path = require("path");
 
 // TODO convert this crap to makefile
 
-var res = function (thePath) {
+var res = function(thePath) {
 	return path.resolve(thePath).replace(/\\/g, '/');
 };
 var idaLogPath = res("idatemplog.txt");
@@ -28,7 +28,7 @@ async function startGenSdkFuncs(game) {
 
 		var logOutput = child_process.spawn(tailCommand, ["-f", idaLogPath]);
 
-		logOutput.stdout.on("data", function (data) {
+		logOutput.stdout.on("data", function(data) {
 			process.stdout.write(data.toString());
 		});
 
@@ -56,7 +56,7 @@ async function startGenConfig(game) {
 
 		var logOutput = child_process.spawn(tailCommand, ["-f", idaLogPath]);
 
-		logOutput.stdout.on("data", function (data) {
+		logOutput.stdout.on("data", function(data) {
 			process.stdout.write(data.toString());
 		});
 
@@ -171,8 +171,6 @@ async function genGameExecutable(gameName) {
 	await startGenConfig(gameName);
 	// await startMcsema(gameName);
 	// await generateNativeExecutable(gameName, "native-64bit");
-
-	fs.unlinkSync(idaLogPath);
 }
 
 genGameExecutable("smm2");
