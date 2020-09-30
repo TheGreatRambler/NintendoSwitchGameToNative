@@ -48,7 +48,7 @@ async function startGenConfig(game) {
 	await new Promise(resolve => {
 		console.log("------START GENERATING CONFIG------");
 		var mcsemaPythonPath = res("mcsema/lib/ida7/get_cfg.py");
-		var cmd = `${idaCommandPrefix} -S\"${mcsemaPythonPath} --output ${"games/" + game + "/config.cfg"} --std-defs ${res("games/" + game + "/defs.txt")} --arch aarch64 --os linux --entrypoint nnMain\" ${res("games/" + game + "/exefs/main")}`;
+		var cmd = `${idaCommandPrefix} -S\"${mcsemaPythonPath} --output ${res("games/" + game + "/config.cfg")} --std-defs ${res("games/" + game + "/defs.txt")} --arch aarch64 --os linux --entrypoint nnMain\" ${res("games/" + game + "/exefs/main")}`;
 		console.log(cmd);
 		var genConfigProcess = child_process.spawn(cmd, {
 			shell: true,
