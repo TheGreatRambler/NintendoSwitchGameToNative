@@ -1,17 +1,17 @@
-const config        = require("./config.json");
-const fs            = require("fs");
+const config = require("./config.json");
+const fs = require("fs");
 const child_process = require("child_process");
-const path          = require("path");
+const path = require("path");
 
 // TODO convert this crap to makefile
 
-var res = function(thePath) {
+var res = function (thePath) {
 	return path.resolve(thePath).replace(/\\/g, '/');
 };
-var idaLogPath  = res("idatemplog.txt");
+var idaLogPath = res("idatemplog.txt");
 var tailCommand = "tail";
 
-var idaCommandPrefix = `${config.IDA_path}/idat.exe -A -Tnintendo -L${idaLogPath}`;
+var idaCommandPrefix = `${config.IDA_path}/idat64.exe -A -Tnintendo -L${idaLogPath}`;
 
 // Executable format: AARCH64 v8A 64 little	default
 // AARCH64:LE:64:v8A (1.4)
@@ -28,7 +28,7 @@ async function startGenSdkFuncs(game) {
 
 		var logOutput = child_process.spawn(tailCommand, ["-f", idaLogPath]);
 
-		logOutput.stdout.on("data", function(data) {
+		logOutput.stdout.on("data", function (data) {
 			process.stdout.write(data.toString());
 		});
 
@@ -48,15 +48,15 @@ async function startGenConfig(game) {
 	await new Promise(resolve => {
 		console.log("------START GENERATING CONFIG------");
 		var mcsemaPythonPath = res("mcsema/lib/ida7/get_cfg.py");
-		var cmd              = `${idaCommandPrefix} -S\"${mcsemaPythonPath} --output ${res("games/" + game + "/config.cfg")} --std-defs ${res("games/" + game + "/defs.txt")} --arch aarch64 --os linux --entrypoint nnMain\" ${res("games/" + game + "/exefs/main")}`;
-        console.log(cmd);
+		var cmd = `${idaCommandPrefix} -S\"${mcsemaPythonPath} --output ${res("games/" + game + "/config.cfg")} --std-defs ${res("games/" + game + "/defs.txt")} --arch aarch64 --os linux --entrypoint nnMain\" ${res("games/" + game + "/exefs/main")}`;
+		console.log(cmd);
 		var genConfigProcess = child_process.spawn(cmd, {
 			shell: true,
 		});
 
 		var logOutput = child_process.spawn(tailCommand, ["-f", idaLogPath]);
 
-		logOutput.stdout.on("data", function(data) {
+		logOutput.stdout.on("data", function (data) {
 			process.stdout.write(data.toString());
 		});
 
@@ -75,7 +75,7 @@ async function startGenConfig(game) {
 async function startMcsema(game) {
 	await new Promise(resolve => {
 		console.log("------START MCSEMA------");
-		var cmd = `${res("mcsema/bin/mcsema-lift-5.0.exe")} --platform linux --architecture aarch64 --cfg-path ${res("games/" + game + "/config.cfg")} --output-path ${res("games/" + game + "/bitcode.bc")}`;
+		var cmd = `${res("mcsema/bin/mcsema-lift-5.0.exe")} --platform linux --architecture aarch64 --cfg-path ${res("games/" + game + "/config.cfg")} --output-path ${res("games/" + game + "/bitcode.bc")} --explicit_args`;
 		console.log(cmd);
 		var mcsemaProcess = child_process.spawn(cmd, {
 			shell: true,
@@ -105,12 +105,12 @@ async function generateNativeExecutable(game, target) {
 		console.log("------START BUILDING NATIVE EXECUTABLE------");
 		var nativeExecutableGenProcess;
 		const binaryFolder = "./bin";
-		if(target === "web") {
+		if (target === "web") {
 			nativeExecutableGenProcess = child_process.spawn(`emcc -O3 ${res(game + ".bc")} -o ${res(game + ".js")}`, {
 				shell: true,
 			});
-		} else if(target === "native-64bit" || target === "native-32bit") {
-			if(!fs.existsSync(binaryFolder)) {
+		} else if (target === "native-64bit" || target === "native-32bit") {
+			if (!fs.existsSync(binaryFolder)) {
 				fs.mkdirSync(binaryFolder);
 			}
 			// https://llvm.org/docs/CommandGuide/llc.html
@@ -134,12 +134,12 @@ async function generateNativeExecutable(game, target) {
 		nativeExecutableGenProcess.on("close", code => {
 			console.log("-----DONE START BUILDING NATIVE EXECUTABLE------");
 			var makefileProcess;
-			if(target === "native-64bit") {
+			if (target === "native-64bit") {
 				console.log("-----START MAKE------");
 				makefileProcess = child_process.spawn(`make ARCH=64`, {
 					shell: true,
 				});
-			} else if(target === "native-32bit") {
+			} else if (target === "native-32bit") {
 				console.log("-----START MAKE------");
 				makefileProcess = child_process.spawn(`make ARCH=32`, {
 					shell: true,
