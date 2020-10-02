@@ -75,7 +75,7 @@ async function startGenConfig(game) {
 async function startMcsema(game) {
 	await new Promise(resolve => {
 		console.log("------START MCSEMA------");
-		var cmd = `${res("mcsema/bin/mcsema-lift-5.0.exe")} --os linux --arch aarch64 --cfg ${res("games/" + game + "/config.cfg")} --output ${res("games/" + game + "/bitcode.bc")} --legacy_mode`;
+		var cmd = `${res("mcsema/bin/mcsema-lift-5.0.exe")} --os linux --arch aarch64 --cfg ${res("games/" + game + "/config.cfg")} --output ${res("games/" + game + "/bitcode.bc")} --abi_libraries ${res("aarch64.bc")}`;
 		console.log(cmd);
 		var mcsemaProcess = child_process.spawn(cmd, {
 			shell: true,
