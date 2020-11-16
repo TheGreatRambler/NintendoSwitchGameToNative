@@ -1,14 +1,14 @@
-const config = require("./config.json");
-const fs = require("fs");
+const config        = require("./config.json");
+const fs            = require("fs");
 const child_process = require("child_process");
-const path = require("path");
+const path          = require("path");
 
 // TODO convert this crap to makefile
 
-var res = function (thePath) {
+var res = function(thePath) {
 	return path.resolve(thePath).replace(/\\/g, '/');
 };
-var idaLogPath = res("idatemplog.txt");
+var idaLogPath  = res("idatemplog.txt");
 var tailCommand = "tail";
 
 var idaCommandPrefix = `${config.IDA_path}/idat64.exe -A -Tnintendo -L${idaLogPath}`;
@@ -28,7 +28,7 @@ async function startGenSdkFuncs(game) {
 
 		var logOutput = child_process.spawn(tailCommand, ["-f", idaLogPath]);
 
-		logOutput.stdout.on("data", function (data) {
+		logOutput.stdout.on("data", function(data) {
 			process.stdout.write(data.toString());
 		});
 
@@ -48,15 +48,15 @@ async function startGenConfig(game) {
 	await new Promise(resolve => {
 		console.log("------START GENERATING CONFIG------");
 		var mcsemaPythonPath = res("mcsema/lib/ida7/get_cfg.py");
-		var cmd = `${idaCommandPrefix} -S\"${mcsemaPythonPath} --output ${res("games/" + game + "/config.cfg")} --std-defs ${res("games/" + game + "/defs.txt")} --arch aarch64 --os linux --entrypoint nnMain\" ${res("games/" + game + "/exefs/main")}`;
-		console.log(cmd);
+		var cmd              = `${idaCommandPrefix} -S\"${mcsemaPythonPath} --output ${res("games/" + game + "/config.cfg")} --std-defs ${res("games/" + game + "/defs.txt")} --arch aarch64 --os linux --entrypoint nnMain\" ${res("games/" + game + "/exefs/main")}`;
+        console.log(cmd);
 		var genConfigProcess = child_process.spawn(cmd, {
 			shell: true,
 		});
 
 		var logOutput = child_process.spawn(tailCommand, ["-f", idaLogPath]);
 
-		logOutput.stdout.on("data", function (data) {
+		logOutput.stdout.on("data", function(data) {
 			process.stdout.write(data.toString());
 		});
 
@@ -74,28 +74,56 @@ async function startGenConfig(game) {
 
 async function startMcsema(game) {
 	await new Promise(resolve => {
-		console.log("------START MCSEMA------");
-		var cmd = `${res("mcsema/bin/mcsema-lift-5.0.exe")} --os linux --arch aarch64 --cfg ${res("games/" + game + "/config.cfg")} --output ${res("games/" + game + "/bitcode.bc")} --explicit_args`;
-		console.log(cmd);
-		var mcsemaProcess = child_process.spawn(cmd, {
+		console.log("------START LIFT------");
+		// First load the image
+		var imageImportProcess = child_process.spawn("docker load -i mcsema.tar", {
 			shell: true,
 		});
 
-		mcsemaProcess.stdout.on("data", data => {
-			console.log(data);
+		imageImportProcess.stdout.on("data", data => {
+			console.log(data.toString());
 		});
 
-		mcsemaProcess.stderr.on("data", data => {
-			console.error(data);
-		});
-
-		mcsemaProcess.on('error', (error) => {
+		imageImportProcess.on('error', (error) => {
 			console.error(error.message);
 		});
 
-		mcsemaProcess.on("close", code => {
-			console.log("-----DONE MCSEMA------");
-			resolve();
+		imageImportProcess.on("close", code => {
+			// MSYS version
+			// var cmd = `MSYS2_ARG_CONV_EXCL="*" docker run -v ${"/" + __dirname.replace(":", "").replace(/\\/g, "/")}:/build --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"}`
+			// CMD version
+			var cmd = `docker run -v ${__dirname}:/build --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"}`
+			console.log(cmd);
+			var mcsemaProcess = child_process.spawn(cmd, {
+				shell: true,
+			});
+
+			mcsemaProcess.stdout.on("data", data => {
+				console.log(data.toString());
+			});
+
+			mcsemaProcess.on('error', (error) => {
+				console.error(error.message);
+			});
+
+			mcsemaProcess.on("close", code => {
+				var containerCloseProcess = child_process.spawn("docker image rm docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64 --force", {
+					shell: true,
+				});
+
+				containerCloseProcess.stdout.on("data", data => {
+					console.log(data.toString());
+				});
+
+				containerCloseProcess.on('error', (error) => {
+					console.error(error.message);
+				});
+
+				containerCloseProcess.on("close", code => {
+					console.log("------DONE LIFT------");
+					resolve();
+				});
+			});
 		});
 	});
 }
@@ -105,16 +133,21 @@ async function generateNativeExecutable(game, target) {
 		console.log("------START BUILDING NATIVE EXECUTABLE------");
 		var nativeExecutableGenProcess;
 		const binaryFolder = "./bin";
-		if (target === "web") {
-			nativeExecutableGenProcess = child_process.spawn(`emcc -O3 ${res(game + ".bc")} -o ${res(game + ".js")}`, {
-				shell: true,
-			});
-		} else if (target === "native-64bit" || target === "native-32bit") {
-			if (!fs.existsSync(binaryFolder)) {
+		if(target === "web") {
+			nativeExecutableGenProcess = child_process.spawn(` emcc
+			- O3 ${res(game + ".bc")} - o $ {
+			res(game + ".js")
+		}
+		`,
+				{
+					shell: true,
+				});
+		} else if(target === "native-64bit" || target === "native-32bit") {
+			if(!fs.existsSync(binaryFolder)) {
 				fs.mkdirSync(binaryFolder);
 			}
 			// https://llvm.org/docs/CommandGuide/llc.html
-			nativeExecutableGenProcess = child_process.spawn(`${config.LLVM_path}/bin/llc -O=3 -obj= -o ${res(binaryFolder + "/maingamebinary.o")} --stats ${res(game + ".bc")}`, {
+			nativeExecutableGenProcess = child_process.spawn(`${config.LLVM_path} /bin/llc -O=3 -o ${res(binaryFolder + "/maingamebinary.o")} --stats ${res(game + ".bc")}`, {
 				shell: true,
 			});
 		}
@@ -134,12 +167,12 @@ async function generateNativeExecutable(game, target) {
 		nativeExecutableGenProcess.on("close", code => {
 			console.log("-----DONE START BUILDING NATIVE EXECUTABLE------");
 			var makefileProcess;
-			if (target === "native-64bit") {
+			if(target === "native-64bit") {
 				console.log("-----START MAKE------");
 				makefileProcess = child_process.spawn(`make ARCH=64`, {
 					shell: true,
 				});
-			} else if (target === "native-32bit") {
+			} else if(target === "native-32bit") {
 				console.log("-----START MAKE------");
 				makefileProcess = child_process.spawn(`make ARCH=32`, {
 					shell: true,
@@ -167,9 +200,9 @@ async function generateNativeExecutable(game, target) {
 }
 
 async function genGameExecutable(gameName) {
-	// await startGenSdkFuncs(gameName);
-	// await startGenConfig(gameName);
-	await startMcsema(gameName);
+	await startGenSdkFuncs(gameName);
+	await startGenConfig(gameName);
+	// await startMcsema(gameName);
 	// await generateNativeExecutable(gameName, "native-64bit");
 }
 

@@ -4,3 +4,7 @@ idalog.txt
 NintendoSwitchGameToNative.7z
 games.7z
 */*.pyc
+idatemplog.txt
+*.bc
+# Provide this yourself
+mcsema.tar

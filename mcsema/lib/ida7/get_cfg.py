@@ -21,6 +21,7 @@ import sys
 import os
 import argparse
 import struct
+import getpass
 import traceback
 import collections
 import itertools
@@ -36,11 +37,9 @@ from collect_variable import *
 from exception import *
 
 #hack for IDAPython to see google protobuf lib
-#if os.path.isdir('C:\\users\\aehar\\appdata\\roaming\\python\\python36\\site-packages'):
-#	sys.path.append('C:\\users\\aehar\\appdata\\roaming\\python\\python36\\site-packages')
-
-#if os.path.isdir('C:\\users\\aehar\\appdata\\roaming\\python\\python36\\site-packages'):
-#	sys.path.append('C:\\users\\aehar\\appdata\\roaming\\python\\python36\\site-packages')
+# TODO add equivlent paths for other kinds of installs
+if os.path.isdir('C:\\users\\' + getpass.getuser() + '\\appdata\\roaming\\python\\python36\\site-packages'):
+	sys.path.append('C:\\users\\' + getpass.getuser() + '\\appdata\\roaming\\python\\python36\\site-packages')
 
 tools_disass_ida_dir = os.path.dirname(__file__)
 tools_disass_dir = os.path.dirname(tools_disass_ida_dir)
