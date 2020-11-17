@@ -24,12 +24,17 @@ async function startGenSdkFuncs(game) {
 		console.log(cmd);
 		var getSdkFuncsProcess = child_process.spawn(cmd, {
 			shell: true,
+			stdio: ["pipe", "pipe", "pipe"],
 		});
 
 		var logOutput = child_process.spawn(tailCommand, ["-f", idaLogPath]);
 
 		logOutput.stdout.on("data", function(data) {
 			process.stdout.write(data.toString());
+		});
+
+		logOutput.stderr.on("data", function(data) {
+			process.stderr.write(data.toString());
 		});
 
 		getSdkFuncsProcess.on('error', (error) => {
@@ -52,12 +57,17 @@ async function startGenConfig(game) {
         console.log(cmd);
 		var genConfigProcess = child_process.spawn(cmd, {
 			shell: true,
+			stdio: ["pipe", "pipe", "pipe"],
 		});
 
 		var logOutput = child_process.spawn(tailCommand, ["-f", idaLogPath]);
 
 		logOutput.stdout.on("data", function(data) {
 			process.stdout.write(data.toString());
+		});
+
+		logOutput.stderr.on("data", function(data) {
+			process.stderr.write(data.toString());
 		});
 
 		genConfigProcess.on('error', (error) => {
@@ -76,15 +86,22 @@ async function startMcsema(game) {
 	await new Promise(resolve => {
 		console.log("------START LIFT------");
 		// First load the image
-		var imageImportProcess = child_process.spawn("docker load -i mcsema.tar", {
+		var loadCommand = "docker load -i mcsema.tar";
+		console.log(loadCommand);
+		var imageImportProcess = child_process.spawn(loadCommand, {
 			shell: true,
+			stdio: ["pipe", "pipe", "pipe"],
 		});
 
 		imageImportProcess.stdout.on("data", data => {
 			console.log(data.toString());
 		});
 
-		imageImportProcess.on('error', (error) => {
+		imageImportProcess.stderr.on("data", function(data) {
+			process.stderr.write(data.toString());
+		});
+
+		imageImportProcess.on("error", (error) => {
 			console.error(error.message);
 		});
 
@@ -96,10 +113,15 @@ async function startMcsema(game) {
 			console.log(cmd);
 			var mcsemaProcess = child_process.spawn(cmd, {
 				shell: true,
+				stdio: ["pipe", "pipe", "pipe"],
 			});
 
 			mcsemaProcess.stdout.on("data", data => {
 				console.log(data.toString());
+			});
+
+			mcsemaProcess.stderr.on("data", function(data) {
+				process.stderr.write(data.toString());
 			});
 
 			mcsemaProcess.on('error', (error) => {
@@ -107,12 +129,18 @@ async function startMcsema(game) {
 			});
 
 			mcsemaProcess.on("close", code => {
-				var containerCloseProcess = child_process.spawn("docker image rm docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64 --force", {
+				var imageDeleteCmd = "docker rm mcsema_bc_build";
+				console.log(imageDeleteCmd);
+				var containerCloseProcess = child_process.spawn(imageDeleteCmd, {
 					shell: true,
 				});
 
 				containerCloseProcess.stdout.on("data", data => {
 					console.log(data.toString());
+				});
+
+				containerCloseProcess.stderr.on("data", function(data) {
+					process.stderr.write(data.toString());
 				});
 
 				containerCloseProcess.on('error', (error) => {
@@ -134,14 +162,10 @@ async function generateNativeExecutable(game, target) {
 		var nativeExecutableGenProcess;
 		const binaryFolder = "./bin";
 		if(target === "web") {
-			nativeExecutableGenProcess = child_process.spawn(` emcc
-			- O3 ${res(game + ".bc")} - o $ {
-			res(game + ".js")
-		}
-		`,
-				{
-					shell: true,
-				});
+			nativeExecutableGenProcess = child_process.spawn(`emcc -O3 ${res(game + ".bc")} -o ${res(game + ".js")}`, {
+				shell: true,
+				stdio: ["pipe", "pipe", "pipe"],
+			});
 		} else if(target === "native-64bit" || target === "native-32bit") {
 			if(!fs.existsSync(binaryFolder)) {
 				fs.mkdirSync(binaryFolder);
@@ -149,15 +173,16 @@ async function generateNativeExecutable(game, target) {
 			// https://llvm.org/docs/CommandGuide/llc.html
 			nativeExecutableGenProcess = child_process.spawn(`${config.LLVM_path} /bin/llc -O=3 -o ${res(binaryFolder + "/maingamebinary.o")} --stats ${res(game + ".bc")}`, {
 				shell: true,
+				stdio: ["pipe", "pipe", "pipe"],
 			});
 		}
 
 		nativeExecutableGenProcess.stdout.on("data", data => {
-			console.log(data);
+			console.log(data.toString());
 		});
 
 		nativeExecutableGenProcess.stderr.on("data", data => {
-			console.error(data);
+			console.error(data.toString());
 		});
 
 		nativeExecutableGenProcess.on('error', (error) => {
@@ -171,20 +196,22 @@ async function generateNativeExecutable(game, target) {
 				console.log("-----START MAKE------");
 				makefileProcess = child_process.spawn(`make ARCH=64`, {
 					shell: true,
+					stdio: ["pipe", "pipe", "pipe"],
 				});
 			} else if(target === "native-32bit") {
 				console.log("-----START MAKE------");
 				makefileProcess = child_process.spawn(`make ARCH=32`, {
 					shell: true,
+					stdio: ["pipe", "pipe", "pipe"],
 				});
 			}
 
 			makefileProcess.stdout.on("data", data => {
-				console.log(data);
+				console.log(data.toString());
 			});
 
 			makefileProcess.stderr.on("data", data => {
-				console.error(data);
+				console.error(data.toString());
 			});
 
 			makefileProcess.on('error', (error) => {
@@ -200,9 +227,9 @@ async function generateNativeExecutable(game, target) {
 }
 
 async function genGameExecutable(gameName) {
-	await startGenSdkFuncs(gameName);
-	await startGenConfig(gameName);
-	// await startMcsema(gameName);
+	// await startGenSdkFuncs(gameName);
+	// await startGenConfig(gameName);
+	await startMcsema(gameName);
 	// await generateNativeExecutable(gameName, "native-64bit");
 }
 
