@@ -232,8 +232,8 @@ async function generateNativeExecutable(game, target) {
 }
 
 async function genGameExecutable(gameName) {
-	// await startGenSdkFuncs(gameName);
-	// await startGenConfig(gameName);
+	await startGenSdkFuncs(gameName);
+	await startGenConfig(gameName);
 	await startMcsema(gameName);
 	// await generateNativeExecutable(gameName, "native-64bit");
 }
