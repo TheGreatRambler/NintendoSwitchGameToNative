@@ -8,3 +8,4 @@ idatemplog.txt
 *.bc
 # Provide this yourself
 mcsema.tar
+node_modules
