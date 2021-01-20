@@ -52,7 +52,13 @@ for ea in idautils.Functions():
 		sdk_funcs_file.write(mcsema_def + '\n')
 		
 		demangled_str = subprocess.check_output([cppfilt_path, func_name], shell=True, startupinfo=si).strip()
-		sdk_funcs_header.write(demangled_str + '\n')
+
+		# Function types that may be printed
+		# https://www.hex-rays.com/products/ida/support/idadoc/1361.shtml
+		if funcdata.rettype.empty():
+			sdk_funcs_header.write("void " + demangled_str + '\n')
+		else:
+			sdk_funcs_header.write(str(funcdata.rettype) + " " + demangled_str + '\n')
 	current_index += 1
 sdk_funcs_file.close()
 sdk_funcs_header.close()
