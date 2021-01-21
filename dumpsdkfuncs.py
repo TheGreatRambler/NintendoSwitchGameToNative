@@ -48,6 +48,11 @@ for ea in idautils.Functions():
 			retcode = 'N'
 		mcsema_def = ("%s %d C %s" % (func_name, funcdata.size(), retcode)).strip()
 		sdk_funcs_file.write(mcsema_def + '\n')
+
+		if func_name.endswith("_1"):
+			func_name = func_name.replace("_1", "")
+		if func_name.endswith("_0"):
+			func_name = func_name.replace("_0", "")
 		
 		demangled_str = subprocess.check_output([cppfilt_path, func_name], shell=True, startupinfo=si).strip()
 
