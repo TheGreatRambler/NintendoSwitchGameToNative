@@ -38,8 +38,6 @@ for ea in idautils.Functions():
 		# Revert weird designations
 		# could also use ida_funcs.set_func_name_if_jumpfunc(ea, None)
 		func_name = func_name.replace("j_", "")
-		func_name = func_name.replace("_0", "")
-		func_name = func_name.replace("_1", "")
 		funcdata = ida_typeinf.func_type_data_t()
 		tinfo = ida_typeinf.tinfo_t();
 		ida_nalt.get_tinfo(tinfo, ea);
@@ -58,7 +56,12 @@ for ea in idautils.Functions():
 		if funcdata.rettype.empty():
 			sdk_funcs_header.write("void " + demangled_str + '\n')
 		else:
-			sdk_funcs_header.write(str(funcdata.rettype) + " " + demangled_str + '\n')
+			# Check for QWord, can be represented as a 64 bit integer
+			reported_type = str(funcdata.rettype)
+			if reported_type == "_QWORD":
+				sdk_funcs_header.write("uint64_t " + demangled_str + '\n')
+			else:
+				sdk_funcs_header.write(reported_type + " " + demangled_str + '\n')
 	current_index += 1
 sdk_funcs_file.close()
 sdk_funcs_header.close()

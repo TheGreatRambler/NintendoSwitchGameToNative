@@ -51,7 +51,15 @@ async function startGenSdkFuncs(game) {
 			console.error(error.message);
 		});
 
+		var sigintFunction;
+		process.on("SIGINT", sigintFunction = function() {
+			getSdkFuncsProcess.kill("SIGINT");
+			logOutput.kill("SIGINT");
+		});
+
 		code = await util.promisify(getSdkFuncsProcess.on).bind(getSdkFuncsProcess)("close");
+
+		process.removeListener("SIGINT", sigintFunction);
 
 		logOutput.kill("SIGINT");
 	}
@@ -88,7 +96,15 @@ async function startGenConfig(game) {
 			console.error(error.message);
 		});
 
+		var sigintFunction;
+		process.on("SIGINT", sigintFunction = function() {
+			genConfigProcess.kill("SIGINT");
+			logOutput.kill("SIGINT");
+		});
+
 		code = await util.promisify(genConfigProcess.on).bind(genConfigProcess)("close");
+
+		process.removeListener("SIGINT", sigintFunction);
 
 		logOutput.kill("SIGINT");
 	}
@@ -121,19 +137,51 @@ async function startMcsema(game) {
 			console.error(error.message);
 		});
 
+		var sigintFunction;
+		process.on("SIGINT", sigintFunction = function() {
+			imageImportProcess.kill("SIGINT");
+		});
+
 		code = await util.promisify(imageImportProcess.on).bind(imageImportProcess)("close");
+
+		process.removeListener("SIGINT", sigintFunction);
 	}
 
 	var cmd;
 	if(process.env.MSYSTEM) {
 		// MSYS version (does name mangling)
-		cmd = `docker run -v ${"/" + __dirname.replace(":", "").replace(/\\/g, "/")}:/build --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"}`
+		cmd = `docker run -v ${"/" + __dirname.replace(":", "").replace(/\\/g, "/")}:/build --cap-add=SYS_NICE --cpu-shares=4000 --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"}`
 	} else {
 		// CMD version
-		cmd = `docker run -v ${__dirname}:/build --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"}`
+		cmd = `docker run -v ${__dirname}:/build --cap-add=SYS_NICE --cpu-shares=4000 --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"}`
 	}
 
 	console.log(cmd);
+
+	var deleteImage = async function() {
+		var imageDeleteCmd = "docker stop mcsema_bc_build ; docker rm mcsema_bc_build";
+		console.log(imageDeleteCmd);
+
+		if(!argv.silent) {
+			var containerCloseProcess = child_process.spawn(imageDeleteCmd, {
+				shell: true,
+			});
+
+			containerCloseProcess.stdout.on("data", data => {
+				console.log(data.toString());
+			});
+
+			containerCloseProcess.stderr.on("data", function(data) {
+				process.stderr.write(data.toString());
+			});
+
+			containerCloseProcess.on('error', (error) => {
+				console.error(error.message);
+			});
+
+			code = await util.promisify(containerCloseProcess.on).bind(containerCloseProcess)("close");
+		}
+	};
 
 	if(!argv.silent) {
 		var mcsemaProcess = child_process.spawn(cmd, {
@@ -153,31 +201,18 @@ async function startMcsema(game) {
 			console.error(error.message);
 		});
 
+		var sigintFunction;
+		process.on("SIGINT", sigintFunction = function() {
+			mcsemaProcess.kill("SIGINT");
+			deleteImage();
+		});
+
 		code = await util.promisify(mcsemaProcess.on).bind(mcsemaProcess)("close");
+
+		process.removeListener("SIGINT", sigintFunction);
 	}
 
-	var imageDeleteCmd = "docker rm mcsema_bc_build";
-	console.log(imageDeleteCmd);
-
-	if(!argv.silent) {
-		var containerCloseProcess = child_process.spawn(imageDeleteCmd, {
-			shell: true,
-		});
-
-		containerCloseProcess.stdout.on("data", data => {
-			console.log(data.toString());
-		});
-
-		containerCloseProcess.stderr.on("data", function(data) {
-			process.stderr.write(data.toString());
-		});
-
-		containerCloseProcess.on('error', (error) => {
-			console.error(error.message);
-		});
-
-		code = await util.promisify(containerCloseProcess.on).bind(containerCloseProcess)("close");
-	}
+	await deleteImage();
 
 	console.log("------DONE LIFT------");
 }
@@ -216,7 +251,14 @@ async function generateNativeExecutable(game, target) {
 			console.error(error.message);
 		});
 
+		var sigintFunction;
+		process.on("SIGINT", sigintFunction = function() {
+			nativeExecutableGenProcess.kill("SIGINT");
+		});
+
 		code = await util.promisify(nativeExecutableGenProcess.on).bind(nativeExecutableGenProcess)("close");
+
+		process.removeListener("SIGINT", sigintFunction);
 	}
 
 	console.log("-----DONE START BUILDING NATIVE EXECUTABLE------");
@@ -247,7 +289,14 @@ async function generateNativeExecutable(game, target) {
 			console.error(error.message);
 		});
 
+		var sigintFunction;
+		process.on("SIGINT", sigintFunction = function() {
+			makefileProcess.kill("SIGINT");
+		});
+
 		code = await util.promisify(makefileProcess.on).bind(makefileProcess)("close");
+
+		process.removeListener("SIGINT", sigintFunction);
 	}
 
 	console.log("-----DONE MAKE------");
@@ -255,9 +304,9 @@ async function generateNativeExecutable(game, target) {
 
 async function genGameExecutable(gameName) {
 	try {
-		// await startGenSdkFuncs(gameName);
-		// await startGenConfig(gameName);
-		await startMcsema(gameName);
+		await startGenSdkFuncs(gameName);
+		await startGenConfig(gameName);
+		// await startMcsema(gameName);
 		// await generateNativeExecutable(gameName, "native-64bit");
 	} catch(e) {
 		console.error(e);
