@@ -150,10 +150,10 @@ async function startMcsema(game) {
 	var cmd;
 	if(process.env.MSYSTEM) {
 		// MSYS version (does name mangling)
-		cmd = `docker run -v ${"/" + __dirname.replace(":", "").replace(/\\/g, "/")}:/build --cap-add=SYS_NICE --cpu-shares=4000 --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"}`
+		cmd = `docker run -v ${"/" + __dirname.replace(":", "").replace(/\\/g, "/")}:/build --cap-add=SYS_NICE --cpu-shares=4000 --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"} --explicit_args`
 	} else {
 		// CMD version
-		cmd = `docker run -v ${__dirname}:/build --cap-add=SYS_NICE --cpu-shares=4000 --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"}`
+		cmd = `docker run -v ${__dirname}:/build --cap-add=SYS_NICE --cpu-shares=4000 --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"} --explicit_args`
 	}
 
 	console.log(cmd);
@@ -304,9 +304,9 @@ async function generateNativeExecutable(game, target) {
 
 async function genGameExecutable(gameName) {
 	try {
-		await startGenSdkFuncs(gameName);
-		await startGenConfig(gameName);
-		// await startMcsema(gameName);
+		// await startGenSdkFuncs(gameName);
+		// await startGenConfig(gameName);
+		await startMcsema(gameName);
 		// await generateNativeExecutable(gameName, "native-64bit");
 	} catch(e) {
 		console.error(e);
