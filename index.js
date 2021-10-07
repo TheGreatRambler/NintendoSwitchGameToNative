@@ -148,13 +148,15 @@ async function startMcsema(game) {
 	}
 
 	var cmd;
+	// clang-format off
 	if(process.env.MSYSTEM) {
 		// MSYS version (does name mangling)
-		cmd = `docker run -v ${"/" + __dirname.replace(":", "").replace(/\\/g, "/")}:/build --cap-add=SYS_NICE --cpu-shares=4000 --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"} --explicit_args`
+		cmd = `docker run -v ${"/" + __dirname.replace(":", "").replace(/\\/g, "/")}:/build --cap-add=SYS_NICE --cpu-shares=4000 --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"} --explicit_args --merge_segments --name_lifted_sections`
 	} else {
 		// CMD version
-		cmd = `docker run -v ${__dirname}:/build --cap-add=SYS_NICE --cpu-shares=4000 --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"} --explicit_args`
+		cmd = `docker run -v ${__dirname}:/build --cap-add=SYS_NICE --cpu-shares=4000 --workdir=/build --name mcsema_bc_build docker.pkg.github.com/lifting-bits/mcsema/mcsema-llvm1000-ubuntu20.04-amd64:latest mcsema-lift-10.0 --os linux --arch aarch64 --cfg ${"games/" + game + "/config.cfg"} --output ${"games/" + game + "/bitcode.bc"} --explicit_args --merge_segments --name_lifted_sections`
 	}
+	// clang-format on
 
 	console.log(cmd);
 
